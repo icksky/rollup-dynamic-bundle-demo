@@ -1,0 +1,13 @@
+body micro-app {
+  overflow: auto !important;
+  background: none !important;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.logs {
+  overflow-y: auto;
+  max-height: 500px;
+}

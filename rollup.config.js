@@ -12,11 +12,16 @@ import scss from 'rollup-plugin-scss'
 import alias from '@rollup/plugin-alias'
 import livereload from 'rollup-plugin-livereload'
 import prettier from 'rollup-plugin-prettier'
+import dts from 'dts-bundle'
+import path from 'path'
 import pkg from './package.json'
 
 const plugins = [resolve(), commonjs(), typescript()]
 
 const isProd = process.env.NODE_ENV === 'production'
+
+const outPath = 'dist'
+const cwd = process.cwd()
 
 const bundles = [
   {
@@ -41,6 +46,25 @@ const bundles = [
           ],
         ],
       }),
+      copy({
+        targets: [
+          {
+            src: 'src/micro-app.d.ts',
+            dest: outPath,
+          },
+        ],
+      }),
+      {
+        name: 'generate-types',
+        writeBundle() {
+          dts.bundle({
+            main: path.join(cwd, outPath, 'micro-app.d.ts'), // 入口地址
+            name: pkg.name, // 声明模块
+            removeSource: true, // 删除源文件
+            out: path.join(cwd, outPath, 'micro-app-bridge.d.ts'), // 合并后输出地址
+          })
+        },
+      },
     ],
   },
   {
@@ -97,8 +121,7 @@ const bundles = [
 let port = 8080
 
 function getConfig(basePath, plugin = []) {
-  const baseOutput = 'dist/'
-  const dest = `${baseOutput}${basePath}`
+  const dest = `${outPath}/${basePath}`
   return {
     input: `examples/${basePath}/index.ts`,
     output: {

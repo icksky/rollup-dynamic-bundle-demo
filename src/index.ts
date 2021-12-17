@@ -1,34 +1,28 @@
-import type { EventCenterForBaseApp, EventCenterForMicroApp } from '@micro-zoe/micro-app/interact'
-import { isString } from 'lodash'
+import type { EventCenterForMicroApp } from '@micro-zoe/micro-app'
 export { setupMicroApp } from './bootstrap'
 import { CMD_REGISGER, NAMESPACE } from './constant'
 import {
   CommunicationData,
   Listener,
   ListenOptions,
+  MicroApp,
   MicroAppOptions,
   MicroAppReturnType,
   PromiseResult,
 } from './micro-app'
-import { runListenerFn, runMicroOrBaseFunction } from './utils'
+import { isString, runListenerFn, runMicroOrBaseFunction } from './utils'
 
 const subMicroApp = window.microApp
 
 export function useMicroApp(
-  app: EventCenterForBaseApp,
+  app: MicroApp,
   appName: string,
   options?: MicroAppOptions
-): MicroAppReturnType<EventCenterForBaseApp>
+): MicroAppReturnType<MicroApp>
 export function useMicroApp(options?: MicroAppOptions): MicroAppReturnType<EventCenterForMicroApp>
-export function useMicroApp(
-  ...params: [MicroAppOptions?] | [EventCenterForBaseApp, string, MicroAppOptions?]
-) {
-  const [app, name, opt] = params as [
-    EventCenterForBaseApp | EventCenterForMicroApp,
-    string?,
-    MicroAppOptions?
-  ]
-  let microApp: EventCenterForBaseApp | EventCenterForMicroApp = subMicroApp!
+export function useMicroApp(...params: [MicroAppOptions?] | [MicroApp, string, MicroAppOptions?]) {
+  const [app, name, opt] = params as [MicroApp | EventCenterForMicroApp, string?, MicroAppOptions?]
+  let microApp: MicroApp | EventCenterForMicroApp = subMicroApp!
   let options: MicroAppOptions = {}
   let appName = ''
   if (isString(name)) {

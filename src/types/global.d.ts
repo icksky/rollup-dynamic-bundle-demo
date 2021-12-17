@@ -28,4 +28,3 @@ declare global {
     }
   }
 }
-

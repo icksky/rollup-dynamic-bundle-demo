@@ -1,8 +1,8 @@
-import type { EventCenterForBaseApp, EventCenterForMicroApp } from '@micro-zoe/micro-app/interact'
-import { CommunicationData, Listener } from './micro-app'
+import type { EventCenterForMicroApp } from '@micro-zoe/micro-app'
+import { CommunicationData, Listener, MicroApp } from './micro-app'
 
 export function runMicroOrBaseFunction<T extends (...args: any[]) => any>(
-  app: EventCenterForBaseApp | EventCenterForMicroApp,
+  app: MicroApp | EventCenterForMicroApp,
   name: string,
   fn: T,
   ...rest: Parameters<T>
@@ -31,4 +31,8 @@ export function runListenerFn(fn: Listener['fn'], data: CommunicationData) {
       throw error
     }
   })
+}
+
+export function isString(target: any): target is string {
+  return typeof target === 'string'
 }

@@ -1,10 +1,12 @@
-import type { EventCenterForBaseApp } from '@micro-zoe/micro-app/interact'
+import type { default as microApp, EventCenterForMicroApp } from '@micro-zoe/micro-app'
+
+export type MicroApp = typeof microApp
 
 export interface MicroAppOptions {
   onRegistered?: (data: Map<string, any>) => void
 }
 
-export interface MicroAppReturnType<T extends EventCenterForBaseApp | EventCenterForMicroApp> {
+export interface MicroAppReturnType<T extends MicroApp | EventCenterForMicroApp> {
   microApp: T
   addEventListener: (
     eventName: string,
@@ -15,17 +17,17 @@ export interface MicroAppReturnType<T extends EventCenterForBaseApp | EventCente
   destroy: () => void
   dispatch: <U>(eventName: string, data?: U) => Promise<PromiseResult | undefined>
   registered: Map<string, any>
-  register: (data: Recordable) => Promise<void>
+  register: (data: Record<string, any>) => Promise<void>
 }
 
-export interface CommunicationData extends PromiseResult<T> {
+export interface CommunicationData<T = any> extends PromiseResult<T> {
   cmd: string
   data?: T
 }
 
 export interface PromiseResult<T = any> {
-  resolve?: ReturnType<PromiseConstructor>[0]
-  reject?: ReturnType<PromiseConstructor>[1]
+  resolve<T>(...args: any[]): Promise<T>
+  reject<T = never>(reason?: any): Promise<T>
   data?: T
 }
 
@@ -35,10 +37,24 @@ export interface ListenOptions {
 }
 
 export interface Listener {
-  fn: (...args: any[]) => Promise<PromiseResult | void> | PromiseResult | void
+  fn: (...args: any[]) => Promise<Partial<PromiseResult> | void> | Partial<PromiseResult> | void
 }
 
 export interface BootstrapOptions {
-  mounted: () => void
-  unmount: () => void
+  mounted?: () => void
+  unmount?: () => void
 }
+
+export function setupMicroApp(
+  microApp: MicroApp,
+  options?: BootstrapOptions,
+  tagName?: string
+): void
+
+export function useMicroApp(
+  app: MicroApp,
+  appName: string,
+  options?: MicroAppOptions
+): MicroAppReturnType<MicroApp>
+
+export function useMicroApp(options?: MicroAppOptions): MicroAppReturnType<EventCenterForMicroApp>

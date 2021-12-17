@@ -1,11 +1,16 @@
 {
   "name": "micro-app-bridge",
   "version": "0.1.0",
-  "author": "icksky4@gmail.com",
+  "author": {
+    "name": "Sky Chen",
+    "url": "http://github.com/icksky",
+    "email": "icksky4@gmail.com"
+  },
   "description": "A bridge for micro app's communication",
   "main": "dist/micro-app-bridge.cjs.js",
   "browser": "dist/micro-app-bridge.umd.js",
   "module": "dist/micro-app-bridge.es.js",
+  "types": "dist/micro-app-bridge.d.ts",
   "scripts": {
     "clean": "rimraf dist/*",
     "serve": "npm run clean && cross-env NODE_ENV=development rollup -c -w",
@@ -36,6 +41,7 @@
     "@vue/eslint-config-standard": "^6.1.0",
     "@vue/eslint-config-typescript": "^9.1.0",
     "cross-env": "^7.0.3",
+    "dts-bundle": "^0.7.3",
     "eslint": "^8.4.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-define-config": "1.0.8",
@@ -65,7 +71,9 @@
     "vue-eslint-parser": "^8.0.1"
   },
   "dependencies": {
-    "core-js": "^3.19.3",
-    "lodash": "^4.17.21"
+    "core-js": "^3.20.0"
+  },
+  "peerDependencies": {
+    "@micro-zoe/micro-app": "^0.6.0"
   }
 }

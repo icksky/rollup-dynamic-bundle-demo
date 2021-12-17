@@ -72,7 +72,7 @@ const bundles = [
     output: {
       file: pkg.browser,
       format: 'umd',
-      name: 'microAppBridge',
+      name: 'microAppHelper',
     },
     plugins: [
       ...plugins,
@@ -86,7 +86,7 @@ const bundles = [
     output: {
       file: pkg.browser.replace('.js', '.min.js'),
       format: 'umd',
-      name: 'microAppBridge',
+      name: 'microAppHelper',
     },
     plugins: [
       ...plugins,

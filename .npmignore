@@ -1,9 +1,9 @@
 .vscode
 examples
 src
-.browserslistrc
+.browerslistrc
 .eslintignore
-.eslinrc.js
+.eslintrc.js
 .gitignore
 .prettierignore
 prettier.config.js

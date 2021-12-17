@@ -6,7 +6,7 @@
     "url": "http://github.com/icksky",
     "email": "icksky4@gmail.com"
   },
-  "description": "A bridge for micro app's communication",
+  "description": "A helper for micro app's.",
   "main": "dist/micro-app-helper.cjs.js",
   "browser": "dist/micro-app-helper.umd.js",
   "module": "dist/micro-app-helper.es.js",

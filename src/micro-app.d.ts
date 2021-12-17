@@ -26,8 +26,8 @@ export interface CommunicationData<T = any> extends PromiseResult<T> {
 }
 
 export interface PromiseResult<T = any> {
-  resolve<T>(...args: any[]): Promise<T>
-  reject<T = never>(reason?: any): Promise<T>
+  resolve<T>(...args: any[]): Promise<T> | void
+  reject<T = never>(reason?: any): Promise<T> | void
   data?: T
 }
 

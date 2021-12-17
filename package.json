@@ -1,5 +1,5 @@
 {
-  "name": "micro-app-bridge",
+  "name": "micro-app-helper",
   "version": "0.1.0",
   "author": {
     "name": "Sky Chen",
@@ -7,10 +7,10 @@
     "email": "icksky4@gmail.com"
   },
   "description": "A bridge for micro app's communication",
-  "main": "dist/micro-app-bridge.cjs.js",
-  "browser": "dist/micro-app-bridge.umd.js",
-  "module": "dist/micro-app-bridge.es.js",
-  "types": "dist/micro-app-bridge.d.ts",
+  "main": "dist/micro-app-helper.cjs.js",
+  "browser": "dist/micro-app-helper.umd.js",
+  "module": "dist/micro-app-helper.es.js",
+  "types": "dist/micro-app-helper.d.ts",
   "scripts": {
     "clean": "rimraf dist/*",
     "serve": "npm run clean && cross-env NODE_ENV=development rollup -c -w",
@@ -19,13 +19,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/icksky/micro-app-bridge.git"
+    "url": "git+https://github.com/icksky/micro-app-helper.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/icksky/micro-app-bridge/issues"
+    "url": "https://github.com/icksky/micro-app-helper/issues"
   },
-  "homepage": "https://github.com/icksky/micro-app-bridge#readme",
+  "homepage": "https://github.com/icksky/micro-app-helper#readme",
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",

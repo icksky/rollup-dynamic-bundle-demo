@@ -1,5 +1,5 @@
 import type { EventCenterForMicroApp } from '@micro-zoe/micro-app'
-export { setupMicroApp } from './bootstrap'
+export { setupMicroApp, setupMicroSubApp } from './bootstrap'
 import { CMD_REGISGER, NAMESPACE } from './constant'
 import {
   CommunicationData,

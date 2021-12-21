@@ -40,16 +40,14 @@ export interface Listener {
   fn: (...args: any[]) => Promise<Partial<PromiseResult> | void> | Partial<PromiseResult> | void
 }
 
-export interface BootstrapOptions {
+export interface SubAppBootstrapOptions {
   mounted?: () => void
   unmount?: () => void
 }
 
-export function setupMicroApp(
-  microApp: MicroApp,
-  options?: BootstrapOptions,
-  tagName?: string
-): void
+export function setupMicroApp(microApp: MicroApp, tagName?: string): void
+
+export function setupMicroSubApp(options?: SubAppBootstrapOptions): void
 
 export function useMicroApp(
   app: MicroApp,

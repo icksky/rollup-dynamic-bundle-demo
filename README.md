@@ -22,10 +22,7 @@ yarn add micro-app-helper
 import microApp from '@micro-zoe/micro-app'
 import { setupMicroApp } from 'micro-app-helper'
 
-setupMicroApp(microApp, {
-  mount: () => { /** do somthing... */ },
-  unmount: () => { /** do somthing... */ },
-})
+setupMicroApp(microApp/**, 'micro-app-sub1' */)
 ```
 
 ```typescript
@@ -52,6 +49,17 @@ app1.addEventListener('tada', handleTada)
 ```
 
 ### 子应用
+
+```typescript
+// main.ts
+
+import { setupMicroSubApp } from 'micro-app-helper'
+
+setupMicroSubApp({
+  mount: () => { /** do somthing... */ },
+  unmount: () => { /** do somthing... */ },
+})
+```
 
 ```typescript
 // example-sub-app1.vue

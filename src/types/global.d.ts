@@ -1,16 +1,12 @@
-import type { EventCenterForMicroApp } from '@micro-zoe/micro-app'
+import type { Plugin } from '@/calculator'
 
 declare global {
   declare interface Window {
-    // for micro-frontend
-    __MICRO_APP_ENVIRONMENT__?: boolean
-    __MICRO_APP_BASE_ROUTE__?: string
-    __MICRO_APP_PUBLIC_PATH__?: string
-    __webpack_public_path__?: string
-    microApp?: EventCenterForMicroApp
+    Calculater: {
+      new (): Calculater
+      static addPlugin(plugin: Plugin)
+    }
   }
-  // for micro-frontend
-  let __webpack_public_path__: string
 
   declare type Recordable<T = any> = Record<string | number, T>
 
@@ -21,6 +17,15 @@ declare global {
   declare type ValueOf<T> = T[keyof T]
 
   declare type Functional<T, K = any[]> = T | ((...args: K) => T)
+
+  declare class Calculater {
+    getResult(): number
+    setResult(value: number): void
+    add(value: number): void
+    minus(value: number): void
+    multiply?(value: number): void
+    divide?(value: number): void
+  }
 
   declare namespace NodeJS {
     interface ProcessEnv {

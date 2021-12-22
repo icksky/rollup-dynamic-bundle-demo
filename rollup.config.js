@@ -12,111 +12,103 @@ import scss from 'rollup-plugin-scss'
 import alias from '@rollup/plugin-alias'
 import livereload from 'rollup-plugin-livereload'
 import prettier from 'rollup-plugin-prettier'
-import dts from 'dts-bundle'
-import path from 'path'
 import pkg from './package.json'
 
-const plugins = [resolve(), commonjs(), typescript()]
+const commonPlugins = [resolve(), commonjs(), typescript()]
 
 const isProd = process.env.NODE_ENV === 'production'
 
 const outPath = 'dist'
-const cwd = process.cwd()
 
-const bundles = [
-  {
-    input: 'src/index.ts',
-    output: {
-      file: pkg.main,
-      format: 'cjs',
-    },
-    plugins: [
-      ...plugins,
-      babel({
-        exclude: 'node_modules/**',
-        babelrc: false,
-        presets: [
-          [
-            '@babel/env',
+const getBundles = (_plugins) => {
+  const plugins = commonPlugins.concat(_plugins)
+  return [
+    {
+      input: 'src/index.ts',
+      output: {
+        file: pkg.main,
+        format: 'cjs',
+      },
+      plugins: [
+        ...plugins,
+        babel({
+          exclude: 'node_modules/**',
+          babelrc: false,
+          presets: [
+            [
+              '@babel/env',
+              {
+                modules: false,
+                useBuiltIns: 'usage',
+                targets: 'maintained node versions',
+              },
+            ],
+          ],
+        }),
+        copy({
+          targets: [
             {
-              modules: false,
-              useBuiltIns: 'usage',
-              targets: 'maintained node versions',
+              src: 'src/micro-app.d.ts',
+              dest: outPath,
             },
           ],
-        ],
-      }),
-      copy({
-        targets: [
-          {
-            src: 'src/micro-app.d.ts',
-            dest: outPath,
-          },
-        ],
-      }),
-      {
-        name: 'generate-types',
-        writeBundle() {
-          dts.bundle({
-            main: path.join(cwd, outPath, 'micro-app.d.ts'), // 入口地址
-            name: pkg.name, // 声明模块
-            removeSource: true, // 删除源文件
-            out: path.join(cwd, outPath, 'micro-app-helper.d.ts'), // 合并后输出地址
-          })
-        },
+        }),
+        ...plugins,
+      ],
+    },
+    {
+      input: 'src/index.ts',
+      output: {
+        file: pkg.browser,
+        format: 'umd',
+        name: 'Calculater',
+        inlineDynamicImports: true,
       },
-    ],
-  },
-  {
-    input: 'src/index.ts',
-    output: {
-      file: pkg.browser,
-      format: 'umd',
-      name: 'microAppHelper',
+      plugins: [
+        ...plugins,
+        babel({
+          exclude: 'node_modules/**',
+        }),
+      ],
     },
-    plugins: [
-      ...plugins,
-      babel({
-        exclude: 'node_modules/**',
-      }),
-    ],
-  },
-  {
-    input: 'src/index.ts',
-    output: {
-      file: pkg.browser.replace('.js', '.min.js'),
-      format: 'umd',
-      name: 'microAppHelper',
+    {
+      input: 'src/index.ts',
+      output: {
+        file: pkg.browser.replace('.js', '.min.js'),
+        format: 'umd',
+        name: 'Calculater',
+        inlineDynamicImports: true,
+      },
+      plugins: [
+        ...plugins,
+        babel({
+          exclude: 'node_modules/**',
+        }),
+        terser({
+          compress: {
+            pure_funcs: ['console.log'],
+          },
+          output: {
+            comments: false,
+          },
+        }),
+      ],
     },
-    plugins: [
-      ...plugins,
-      babel({
-        exclude: 'node_modules/**',
-      }),
-      terser({
-        compress: {
-          pure_funcs: ['console.log'],
-        },
-        output: {
-          comments: false,
-        },
-      }),
-    ],
-  },
-  {
-    input: 'src/index.ts',
-    output: {
-      file: pkg.module,
-      format: 'es',
+    {
+      input: 'src/index.ts',
+      output: {
+        file: pkg.module,
+        format: 'es',
+      },
+      plugins: [
+        ...plugins,
+        babel({
+          exclude: 'node_modules/**',
+        }),
+      ],
     },
-    plugins: [
-      ...plugins,
-      babel({
-        exclude: 'node_modules/**',
-      }),
-    ],
-  },
-]
+  ]
+}
 
 let port = 8080
 
@@ -133,16 +125,12 @@ function getConfig(basePath, plugin = []) {
         parser: 'babel',
       }),
       eslint(),
-      vue({
-        compilerOptions: {
-          isCustomElement: (tag) => /^micro-app/.test(tag),
-        },
-      }),
+      vue(),
       scss(),
-      ...plugins,
+      ...commonPlugins,
       server({
         port: port++,
-        contentBase: [dest],
+        contentBase: [dest, outPath],
         host: '0.0.0.0',
         historyApiFallback: true,
         headers: {
@@ -174,6 +162,21 @@ function getConfig(basePath, plugin = []) {
   }
 }
 
-export default isProd
-  ? bundles
-  : [getConfig('main-app', [livereload()]), getConfig('sub-app'), getConfig('sub-app2')]
+export default async (argv) => {
+  const modules = {
+    // all modules
+    'process.env.MODULE_MULTIPLY': JSON.stringify(false),
+    'process.env.MODULE_DIVIDE': JSON.stringify(false),
+  }
+  if (typeof argv.module === 'string') {
+    argv.module = argv.module.split(',')
+  }
+  argv.module?.forEach(
+    (name) => (modules[`process.env.MODULE_${name.toUpperCase()}`] = JSON.stringify(true))
+  )
+  const plugins = [replace(modules)]
+
+  return isProd
+    ? getBundles(plugins)
+    : [getConfig('main', [livereload()]), getBundles(plugins)[1] /** umd */]
+}

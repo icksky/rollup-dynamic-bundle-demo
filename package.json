@@ -1,16 +1,16 @@
 {
-  "name": "micro-app-helper",
-  "version": "0.1.2",
+  "name": "rollup-dynamic-bundle-demo",
+  "version": "0.1.0",
   "author": {
     "name": "Sky Chen",
     "url": "http://github.com/icksky",
     "email": "icksky4@gmail.com"
   },
-  "description": "A helper for micro app's.",
-  "main": "dist/micro-app-helper.cjs.js",
-  "browser": "dist/micro-app-helper.umd.js",
-  "module": "dist/micro-app-helper.es.js",
-  "types": "dist/micro-app-helper.d.ts",
+  "description": "A demo for Rollup's dynamic modules bundle",
+  "main": "dist/calculator.cjs.js",
+  "browser": "dist/calculator.umd.js",
+  "module": "dist/calculator.es.js",
+  "types": "dist/calculator.d.ts",
   "scripts": {
     "clean": "rimraf dist/*",
     "serve": "npm run clean && cross-env NODE_ENV=development rollup -c -w",
@@ -19,17 +19,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/icksky/micro-app-helper.git"
+    "url": "git+https://github.com/icksky/rollup-dynamic-bundle-demo.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/icksky/micro-app-helper/issues"
+    "url": "https://github.com/icksky/rollup-dynamic-bundle-demo/issues"
   },
-  "homepage": "https://github.com/icksky/micro-app-helper#readme",
+  "homepage": "https://github.com/icksky/rollup-dynamic-bundle-demo#readme",
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
-    "@micro-zoe/micro-app": "^0.6.0",
     "@rollup/plugin-alias": "^3.1.8",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-eslint": "^8.0.1",
@@ -72,8 +71,5 @@
   },
   "dependencies": {
     "core-js": "^3.20.0"
-  },
-  "peerDependencies": {
-    "@micro-zoe/micro-app": "^0.6.0"
   }
 }
